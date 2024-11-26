@@ -1,0 +1,165 @@
+version: 2
+
+models:
+  - name: stg_local_bike__orders
+    description: Order data with basic cleaning and transformation applied, one row per order.
+
+    columns:
+      - name: order_id
+        description: Unique key for each order
+        tests :
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: Identifier of the customer. Foreign key.
+        tests:
+          - relationships:
+              name: customer_id_foreign_key_in_stg_local_bike__orders
+              to: ref('stg_local_bike__customers')
+              field: customer_id
+
+      - name: store_id
+        description: Identifier of the store. Foreign key.
+        tests:
+          - relationships:
+              name: store_id_foreign_key_in_stg_local_bike__orders
+              to: ref('stg_local_bike__stores')
+              field: store_id
+
+      - name: staff_id
+        description: Identifier of the store. Foreign key.
+        tests:
+          - relationships:
+              name: staff_id_foreign_key_in_stg_local_bike__oders
+              to: ref('stg_local_bike__staffs')
+              field: staff_id
+
+      - name: order_status
+        description: "Current status of the order"
+
+   
+
+  - name: stg_local_bike__order_items
+    description: This model contains informations about orders at order item level
+
+    columns:
+      - name: order_item_id
+        description: This is a unique key for the order_items
+        tests :
+          - not_null
+          - unique
+      - name: order_id
+        description: The corresponding order each order item belongs to, foreign key fo the order table
+        tests:
+          - relationships:
+                name: order_id_foreign_key_in_stg_local_bike__order_items
+                to: ref('stg_local_bike__orders')
+                field: order_id
+      - name: product_id
+        description: The product_id corresponding to the item ordered. Foreign key fo the product table
+        tests:
+          - relationships:
+                name: product_id_foreign_key_in_stg_local_bike__order_items
+                to: ref('stg_local_bike__products')
+                field: product_id
+
+  - name: stg_local_bike__brands
+    description: This model contains informations about product brands.
+
+    columns:
+      - name: brand_id
+        description: Unique key for each brand
+        tests :
+          - not_null
+          - unique
+
+  - name: stg_local_bike__categories
+    description: This model contains informations about product categories.
+
+    columns:
+      - name: category_id
+        description: Unique key for each category
+        tests :
+          - not_null
+          - unique
+
+  - name: stg_local_bike__customers
+    description: customers data with basic cleaning and transformation applied, one row per customer.
+    columns:
+      - name: customer_id
+        description: Unique key for each customer
+        tests :
+          - not_null
+          - unique
+      
+  - name: stg_local_bike__products
+    description: Products data with basic cleaning and transformation applied, one row per product.
+    columns:
+      - name: product_id
+        description: Unique key for each product
+        tests :
+          - not_null
+          - unique
+      - name: brand_id
+        description: The brand_id corresponding to the item. Foreign key fo the brand table
+        tests:
+          - relationships:
+                name: brand_id_foreign_key_in_stg_local_bike__products
+                to: ref('stg_local_bike__brands')
+                field: brand_id
+      - name: category_id
+        description: The category corresponding to the item. Foreign key fo the categories table
+        tests:
+          - relationships:
+                name: category_id_foreign_key_in_stg_local_bike__products
+                to: ref('stg_local_bike__categories')
+                field: category_id
+
+  - name: stg_local_bike__staffs
+    description: staffs data with basic cleaning and transformation applied, one row per staff member.
+    columns:
+      - name: staff_id
+        description: Unique key for each staff member
+        tests :
+          - not_null
+          - unique
+      - name: store_id
+        description: The store where the staff member works. Foreign key fo the store table
+        tests:
+          - relationships:
+                name: store_id_foreign_key_in_stg_local_bike__staffs
+                to: ref('stg_local_bike__stores')
+                field: store_id
+
+  - name: stg_local_bike__stocks
+    description: stocks data with basic cleaning and transformation applied
+    columns:
+      - name: stock_id
+        description: Unique key
+        tests :
+          - not_null
+          - unique
+      - name: store_id
+        description: The store where the stock is. Foreign key fo the store table
+        tests:
+          - relationships:
+                name: store_id_foreign_key_in_stg_local_bike__stocks
+                to: ref('stg_local_bike__stores')
+                field: store_id
+      - name: product_id
+        description: The product_id corresponding to the stock. Foreign key fo the product table
+        tests:
+          - relationships:
+                name: product_id_foreign_key_in_stg_local_bike__stocks
+                to: ref('stg_local_bike__products')
+                field: product_id
+
+  - name: stg_local_bike__stores
+    description: stores data with basic cleaning and transformation applied
+    columns:
+      - name: store_id
+        description: Unique key
+        tests :
+          - not_null
+          - unique
